@@ -54,7 +54,7 @@ matrix.forEach((row, y) => {
 }
 
 function merge(arena, player) {
-	player.marix.forEach((row, y) =>{
+	player.matrix.forEach((row, y) =>{
 		row.forEach((value, x)	=> {
 			if (value !== 0) {
 				arena[y+ player.pos.y][x + player.pos.x] = value;
