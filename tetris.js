@@ -1,4 +1,4 @@
-// Meth Meth Method Tetris Game (21:56)//
+// Meth Meth Method Tetris Game (24:55)//
 
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
@@ -35,8 +35,9 @@ function createMatrix(w, h) {
 function draw () {
 
      context.fillStyle='#000';
-     context.fillRect(0, 0, canvas.width, canvas.height);
-
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+	 
+	 drawMatrix(arena, {x: 0, y: 0});
 	 drawMatrix(player.matrix, player.pos);
 }
 
@@ -63,7 +64,7 @@ function merge(arena, player) {
 	});
 }
 
-//Problem Area 
+ 
 function playerDrop() {
 	player.pos.y++;
 	if (collide(arena, player)) {
@@ -72,6 +73,36 @@ function playerDrop() {
 		player.pos.y = 0;
 	}
 	dropCounter = 0;
+}
+
+function playerMove(dir){
+	player.pos.x += dir;
+	if (collide(arena, player)) {
+		player.pos.x -= dir;
+	}
+}
+
+function playerRotate(dir) {
+	rotate(player.matrix, dir);
+}
+function rotate (matrix, dir) {
+	for (let y=0; y < matrix.lenght; ++y) { 
+		for (let x = 0; x < y; ++x) {
+			[
+				matrix[x][y],
+				matrix[y][x],
+			] = [
+				matrix[y][x],
+				matrix[x][y],
+			];
+		}
+	}
+
+	if (dir > 0) {
+		matrix.forEach(row => row.reverse());
+	} else {
+		matrix.reverse();
+	}
 }
 
 let dropCounter = 0;
@@ -101,11 +132,17 @@ const player ={
 
 document.addEventListener('keydown', event => {
 	if (event.keyCode === 37) {
-		player.pos.x--;
+		playerMove(-1);
 	} else if (event.keyCode === 39){
-		player.pos.x++;
+		playerMove(1);
 	}else if (event.keyCode === 40){
 		playerDrop();
+		//Q key
+	}else if (event.keyCode === 81){ 
+		playerRotate(-1);
+		// W Key
+	}else if (event.keyCode === 87){
+		playerRotate(1);
 	}
 });
 update();
